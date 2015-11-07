@@ -1,14 +1,11 @@
 package com.hta.travelassistant.engine;
 
-import android.content.res.Resources;
-
 import org.joda.time.DateTimeZone;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,7 +22,6 @@ public class AirportUtils {
         BufferedReader in = new BufferedReader(new InputStreamReader(stream));
         String line = null;
         Map<String, String> m = new HashMap<>();
-        StringBuilder responseData = new StringBuilder();
         try {
             while ((line = in.readLine()) != null) {
                 ;
