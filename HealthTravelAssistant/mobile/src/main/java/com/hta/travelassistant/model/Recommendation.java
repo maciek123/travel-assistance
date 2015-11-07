@@ -3,17 +3,15 @@ package com.hta.travelassistant.model;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 
-import java.util.List;
-
-public class Period {
+public class Recommendation {
   private DateTime startTime;
   private Duration duration;
-  private Iterable<Action> recommendations;
+  private Iterable<Action> actions;
 
-  public Period(DateTime startTime, Duration duration, Iterable<Action> recommendations) {
+  public Recommendation(DateTime startTime, Duration duration, Iterable<Action> actions) {
     this.startTime = startTime;
     this.duration = duration;
-    this.recommendations = recommendations;
+    this.actions = actions;
   }
 
   public DateTime getStartTime() {
@@ -24,7 +22,7 @@ public class Period {
     return duration;
   }
 
-  public Iterable<Action> getRecommendations() {
-    return recommendations;
+  public Iterable<Action> getActions() {
+    return actions;
   }
 }
