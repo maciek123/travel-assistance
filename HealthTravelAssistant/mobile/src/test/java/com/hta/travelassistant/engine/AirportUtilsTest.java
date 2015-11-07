@@ -9,7 +9,7 @@ public class AirportUtilsTest {
 
     @Test
     public void testAirportToTZ() throws Exception {
-        AirportUtils.airportToTZ("LAX");
         assertEquals(DateTimeZone.forID("America/Los_Angeles"), AirportUtils.airportToTZ("LAX"));
+        assertEquals(DateTimeZone.forID("America/Bogota"), AirportUtils.airportToTZ("ACL"));
     }
 }

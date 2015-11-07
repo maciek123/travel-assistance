@@ -25,4 +25,13 @@ public class Recommendation {
   public Iterable<Action> getActions() {
     return actions;
   }
+
+  @Override
+  public String toString() {
+    return "Recommendation{" +
+            "startTime=" + startTime +
+            ", duration=" + duration +
+            ", actions=" + actions +
+            '}';
+  }
 }

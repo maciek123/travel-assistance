@@ -12,7 +12,7 @@ import java.util.Map;
 public class AirportUtils {
     private static Map<String, String> mapping = readMapping();
 
-    public static DateTimeZone airportToTZ(String airport) throws IOException {
+    public static DateTimeZone airportToTZ(String airport) {
         return DateTimeZone.forID(mapping.get(airport));
     }
 
