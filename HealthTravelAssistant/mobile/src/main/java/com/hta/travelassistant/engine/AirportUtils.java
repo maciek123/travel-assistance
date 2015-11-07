@@ -16,6 +16,10 @@ public class AirportUtils {
         return DateTimeZone.forID(mapping.get(airport));
     }
 
+    public static boolean isValidAirportId(String id) {
+        return mapping.keySet().contains(id);
+    }
+
     private static Map<String, String> readMapping() {
         InputStream stream = AirportUtils.class.getClassLoader().getResourceAsStream("iata.tzmap");
 
@@ -33,4 +37,5 @@ public class AirportUtils {
         }
         return m;
     }
+
 }
