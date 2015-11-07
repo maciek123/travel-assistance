@@ -15,6 +15,11 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.hta.travelassistant.model.Action.NOSLEEP;
+import static com.hta.travelassistant.model.Action.NOSUNLIGHT;
+import static com.hta.travelassistant.model.Action.SLEEP;
+import static com.hta.travelassistant.model.Action.SUNLIGHT;
+import static java.util.Arrays.asList;
 import static java.util.Collections.*;
 
 public class JetlagSleepPlanner implements SleepPlanner {
@@ -37,7 +42,13 @@ public class JetlagSleepPlanner implements SleepPlanner {
         List<Recommendation> recommendations = new LinkedList<>();
         while (offset * step < 0 && timeToSleep.isAfterNow()) {
             timeToSleep = timeToSleep.plusMinutes((int) (60 * step));
-            recommendations.add(new Recommendation(timeToSleep, normalDuration, singletonList(Action.SLEEP)));
+            if (fwd) {
+                recommendations.add(new Recommendation(timeToSleep.minusHours(3), Duration.standardHours(3), asList(SUNLIGHT, NOSLEEP)));
+                recommendations.add(new Recommendation(timeToSleep.plus(normalDuration), Duration.standardHours(1), asList(NOSUNLIGHT, NOSLEEP)));
+            } else {
+                recommendations.add(new Recommendation(timeToSleep.plus(normalDuration), Duration.standardHours(3), asList(SUNLIGHT, NOSLEEP)));
+            }
+            recommendations.add(new Recommendation(timeToSleep, normalDuration, singletonList(SLEEP)));
             offset += step;
             timeToSleep = timeToSleep.minusDays(1);
         }

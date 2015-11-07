@@ -34,4 +34,25 @@ public class Recommendation {
             ", actions=" + actions +
             '}';
   }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Recommendation that = (Recommendation) o;
+
+        if (!startTime.equals(that.startTime)) return false;
+        if (!duration.equals(that.duration)) return false;
+        return actions.equals(that.actions);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = startTime.hashCode();
+        result = 31 * result + duration.hashCode();
+        result = 31 * result + actions.hashCode();
+        return result;
+    }
 }
