@@ -22,10 +22,4 @@ public class SleepPlannerTest {
                 Collections.singletonList(new SleepEntry(DateTime.now().minusDays(2), Duration.standardHours(7))));
     }
 
-    @Test
-    public void tz() {
-        DateTimeZone timeZone = DateTimeZone.forID("America/Los_Angeles");
-        System.out.println(timeZone.toString());
-    }
-
 }
