@@ -51,7 +51,7 @@ public class NextFlightActivity extends AppCompatActivity {
             }
 
 
-            List<FlightInfo> all = AndroidFlightCalendarService.getInstnace(getContentResolver()).getAllFlights();
+            List<FlightInfo> all = AndroidFlightCalendarService.getInstnace(this).getAllFlights();
         } catch (Exception e) {
             Log.e("No Permission", "No permission", e);
             e.printStackTrace();
@@ -65,7 +65,7 @@ public class NextFlightActivity extends AppCompatActivity {
             case REQUEST_CODE_ASK_PERMISSIONS:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // Permission Granted
-                    List<FlightInfo> all = AndroidFlightCalendarService.getInstnace(getContentResolver()).getAllFlights();
+                    List<FlightInfo> all = AndroidFlightCalendarService.getInstnace(this).getAllFlights();
                 } else {
                     // Permission Denied
                     Toast.makeText(NextFlightActivity.this, "WRITE_CONTACTS Denied", Toast.LENGTH_SHORT)

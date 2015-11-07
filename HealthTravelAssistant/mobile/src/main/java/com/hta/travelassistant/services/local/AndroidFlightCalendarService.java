@@ -4,6 +4,8 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.CalendarContract;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.hta.travelassistant.model.FlightInfo;
 
@@ -15,114 +17,102 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * TODO: add description...
+ * Implementation of FlightCalendarService for the default Android calendar
  */
 public class AndroidFlightCalendarService implements FlightCalendarService {
 
-    // Projection array. Creating indices for this array instead of doing dynamic lookups improves performance.
-    public static final String[] EVENT_PROJECTION = new String[]{
-            CalendarContract.Events.TITLE,
-            CalendarContract.Events.DESCRIPTION,
-            CalendarContract.Events.EVENT_LOCATION,
-            CalendarContract.Events.STATUS,
-
-    };
-
     public static final String[] EVENT_INSTANCE_PROJECTION = new String[]{
-//            CalendarContract.Instances.EVENT_ID,
-//            CalendarContract.Instances.EVENT_LOCATION,
+            CalendarContract.Instances.EVENT_ID,
             CalendarContract.Instances.TITLE,
+            CalendarContract.Instances.EVENT_LOCATION,
             CalendarContract.Instances.DESCRIPTION,
-            CalendarContract.Instances.START_DAY,
-            CalendarContract.Instances.END_DAY
+            CalendarContract.Instances.BEGIN,
+            CalendarContract.Instances.END
     };
-
 
 
     // The indices for the projection array above.
-    private static final int PROJECTION_ID_INDEX = 0;
-    private static final int PROJECTION_ACCOUNT_NAME_INDEX = 1;
-    private static final int PROJECTION_DISPLAY_NAME_INDEX = 2;
-    private static final int PROJECTION_OWNER_ACCOUNT_INDEX = 3;
+    private static final int INSTANCE_PROJECTION_ID = 0;
+    private static final int INSTANCE_PROJECTION_TITLE = 1;
+    private static final int INSTANCE_PROJECTION_LOCATION = 2;
+    private static final int INSTANCE_PROJECTION_DESCRIPTION = 3;
+    private static final int INSTANCE_PROJECTION_BEGIN = 4;
+    private static final int INSTANCE_PROJECTION_END = 5;
+
+    //  range defines how many years before and after from today we will request for getAllFlights
+    public static final int DEFAULT_DATE_RANGE = 5;
 
     //  Ii has to be provided from Activity or Service
-    private final ContentResolver contentResolver;
+    private final AppCompatActivity activity;
 
-    private AndroidFlightCalendarService(ContentResolver contentResolver) {
-        this.contentResolver = contentResolver;
+    private AndroidFlightCalendarService(AppCompatActivity activity) {
+        this.activity = activity;
     }
 
-    public static FlightCalendarService getInstnace(ContentResolver contentResolver){
-        return new AndroidFlightCalendarService(contentResolver);
+    public static FlightCalendarService getInstnace(AppCompatActivity activity) {
+        return new AndroidFlightCalendarService(activity);
     }
 
     @Override
     public List<FlightInfo> getAllFlights() {
-
-        // Run query
-        ContentResolver cr = getContentResolver();
-        Uri uri = CalendarContract.Events.CONTENT_URI;
-
-/*        String selection = "((" + CalendarContract.Instances.TITLE + " = ?) AND ("
-                + CalendarContract.Calendars.ACCOUNT_TYPE + " = ?) AND ("
-                + CalendarContract.Calendars.OWNER_ACCOUNT + " = ?))";
-
-        String[] selectionArgs = new String[]{"sampleuser@gmail.com", "com.google",
-                "sampleuser@gmail.com"};*/
-
-        Cursor cur = null;
-        try {
-            cur = cr.query(uri, EVENT_PROJECTION, null, null, null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return parseCursor(cur);
+        DateTime dateTo = DateTime.now().plusYears(DEFAULT_DATE_RANGE);
+        DateTime dateFrom = DateTime.now().minusYears(DEFAULT_DATE_RANGE);
+        return getFlightInfo(dateFrom, dateTo);
     }
 
     @Override
     public List<FlightInfo> getFurtherFlights() {
-        return null;
+        return getFlightInfo(DateTime.now(), DateTime.now().plusYears(DEFAULT_DATE_RANGE));
     }
 
     @Override
     public List<FlightInfo> getPreviousFlights() {
-        return null;
+        return getFlightInfo(DateTime.now().minusYears(DEFAULT_DATE_RANGE), DateTime.now());
     }
 
     @Override
     public FlightInfo getNextFlight() {
+        List<FlightInfo> futureFlights = getFurtherFlights();
+        if(futureFlights != null && !futureFlights.isEmpty()){
+            return futureFlights.get(0);
+        }
         return null;
     }
 
-    public ContentResolver getContentResolver() {
-        return contentResolver;
+    private List<FlightInfo> getFlightInfo(DateTime from, DateTime to) {
+        try {
+            ContentResolver cr = activity.getContentResolver();
+            long yearAgo = from.getMillis();
+            long yearFromNow = to.getMillis();
+            Uri uri = Uri.parse("content://com.android.calendar/instances/when/" + yearAgo + "/" + yearFromNow);
+            // We are looking for titles contain 'flight' word
+            String[] TITLE_FLIGHT_PATTERNS = new String[]{"%flight%"};
+            Cursor cur = cr.query(uri, EVENT_INSTANCE_PROJECTION, "(title like ?)", TITLE_FLIGHT_PATTERNS, null);
+            return parseEventCursor(cur);
+        } catch (Exception e) {
+            throw new RuntimeException("Can not read data from calendar", e);
+        }
+
     }
 
-    private List<FlightInfo> parseCursor(Cursor cur) {
-        if(cur == null){
+    private List<FlightInfo> parseEventCursor(Cursor cur) {
+        if (cur == null) {
             return Collections.EMPTY_LIST;
         }
 
         List<FlightInfo> result = new ArrayList<>(cur.getCount());
         // Use the cursor to step through the returned records
         while (cur.moveToNext()) {
-            long calID = 0;
-            String displayName = null;
-            String accountName = null;
-            String ownerName = null;
-
-            // Get the field values
-            calID = cur.getLong(PROJECTION_ID_INDEX);
-            displayName = cur.getString(PROJECTION_DISPLAY_NAME_INDEX);
-            accountName = cur.getString(PROJECTION_ACCOUNT_NAME_INDEX);
-            ownerName = cur.getString(PROJECTION_OWNER_ACCOUNT_INDEX);
-
+            String title = cur.getString(INSTANCE_PROJECTION_TITLE);
+            Log.d("Process flight event", "Process flight event: " + title);
             String srcAirport = "LAX";
             String dstAirport = "ZHR";
+            String from = cur.getString(INSTANCE_PROJECTION_BEGIN);
+            String to = cur.getString(INSTANCE_PROJECTION_END);
             DateTime startTime = DateTime.now();
             Duration duration = Duration.standardHours(12);
             result.add(new FlightInfo(srcAirport, dstAirport, startTime, duration));
+
         }
         return result;
     }
