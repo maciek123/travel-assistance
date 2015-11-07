@@ -19,4 +19,16 @@ public class FlightInfo {
   public DateTime getStartTime() {
     return startTime;
   }
+
+  public String getFrom() {
+    return from;
+  }
+
+  public String getTo() {
+    return to;
+  }
+
+  public Duration getDuration() {
+    return duration;
+  }
 }
