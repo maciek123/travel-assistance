@@ -25,3 +25,13 @@ proguard/
 
 # Log Files
 *.log
+HealthTravelAssistant/.idea/gradle.xml
+*.name
+HealthTravelAssistant/.idea/compiler.xml
+HealthTravelAssistant/.idea/encodings.xml
+HealthTravelAssistant/.idea/copyright/profiles_settings.xml
+HealthTravelAssistant/.idea/misc.xml
+*.iml
+HealthTravelAssistant/.idea/vcs.xml
+HealthTravelAssistant/.idea/runConfigurations.xml
+HealthTravelAssistant/.idea/modules.xml
