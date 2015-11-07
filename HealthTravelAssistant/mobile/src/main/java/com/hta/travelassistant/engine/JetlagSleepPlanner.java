@@ -11,9 +11,11 @@ import org.joda.time.Duration;
 import java.util.Arrays;
 import java.util.Collections;
 
+import static java.util.Collections.*;
+
 public class JetlagSleepPlanner implements SleepPlanner {
     @Override
     public Iterable<Recommendation> planSleep(FlightInfo flightInfo, Iterable<SleepEntry> sleepEntries) {
-        return Collections.singletonList(new Recommendation(DateTime.now(), Duration.standardHours(2), Collections.singletonList(Action.NOSLEEP)));
+        return singletonList(new Recommendation(DateTime.now(), Duration.standardHours(2), singletonList(Action.NOSLEEP)));
     }
 }
