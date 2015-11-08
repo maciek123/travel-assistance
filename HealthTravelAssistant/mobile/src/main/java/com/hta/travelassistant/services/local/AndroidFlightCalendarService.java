@@ -1,6 +1,7 @@
 package com.hta.travelassistant.services.local;
 
 import android.content.ContentResolver;
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.CalendarContract;
@@ -46,14 +47,14 @@ public class AndroidFlightCalendarService implements FlightCalendarService {
     public static final int DEFAULT_DATE_RANGE = 5;
 
     //  Ii has to be provided from Activity or Service
-    private final AppCompatActivity activity;
+    private final Context activity;
 
-    private AndroidFlightCalendarService(AppCompatActivity activity) {
+    private AndroidFlightCalendarService(Context activity) {
         this.activity = activity;
         AirportUtils.init(activity.getResources().openRawResource(R.raw.iata));
     }
 
-    public static FlightCalendarService getInstnace(AppCompatActivity activity) {
+    public static FlightCalendarService getInstnace(Context activity) {
         return new AndroidFlightCalendarService(activity);
     }
 
