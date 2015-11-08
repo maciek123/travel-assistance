@@ -16,6 +16,7 @@ import static com.hta.travelassistant.model.Action.NOSLEEP;
 import static com.hta.travelassistant.model.Action.NOSUNLIGHT;
 import static com.hta.travelassistant.model.Action.SLEEP;
 import static com.hta.travelassistant.model.Action.SUNLIGHT;
+import static java.lang.Math.abs;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.joda.time.Duration.standardHours;
@@ -36,9 +37,10 @@ public class JetlagSleepPlanner implements SleepPlanner {
         LocalTime normalSleep = new LocalTime(normal.getStartTime());
         Duration normalDuration = normal.getDuration();
         System.out.println("normalSleep = " + normalSleep);
-        DateTime timeToSleep = flightInfo.getStartTime().minusDays(1).withTime(normalSleep);
+        DateTime timeToSleep = flightInfo.getStartTime().minusDays(abs((int) (offset / step))).withTime(normalSleep);
+        while (timeToSleep.isBeforeNow()) timeToSleep.plusDays(1);
         List<Recommendation> recommendations = new LinkedList<>();
-        while (offset * step < 0 && timeToSleep.isAfterNow()) {
+        while (offset * step < 0) {
             timeToSleep = timeToSleep.plusMinutes((int) (60 * step));
             if (fwd) {
                 recommendations.add(new Recommendation(timeToSleep.minusHours(3), standardHours(3), asList(SUNLIGHT, NOSLEEP)));
@@ -48,7 +50,7 @@ public class JetlagSleepPlanner implements SleepPlanner {
             }
             recommendations.add(new Recommendation(timeToSleep, normalDuration, singletonList(SLEEP)));
             offset += step;
-            timeToSleep = timeToSleep.minusDays(1);
+            timeToSleep = timeToSleep.plusDays(1);
         }
         for (Recommendation r : recommendations) {
             System.out.println("r = " + r);
