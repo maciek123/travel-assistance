@@ -1,33 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
 
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/flightFrom"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:textStyle="bold"
-        android:typeface="sans" />
+        android:typeface="sans"
+        android:layout_weight="1" />
 
     <TextView
-        android:id="@+id/reporter"
+        android:id="@+id/flightTo"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_below="@id/title"
         android:layout_marginTop="5dip"
-        android:textColor="#343434"
-        android:textSize="12sp" />
+        android:textStyle="bold"
+        android:typeface="sans"
+        android:layout_weight="1" />
 
     <TextView
-        android:id="@+id/date"
+        android:id="@+id/flightDate"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/reporter"
-        android:layout_alignBottom="@+id/reporter"
+        android:layout_height="0dp"
+        android:layout_marginTop="5dip"
         android:layout_alignParentRight="true"
-        android:textColor="#343434"
-        android:textSize="12sp" />
+        android:textStyle="bold"
+        android:typeface="sans"
+        android:layout_weight="1" />
+
+    <TextView
+        android:id="@+id/terminal"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="5dip"
+        android:layout_alignParentRight="true"
+        android:textStyle="bold"
+        android:typeface="sans"
+        android:layout_weight="1" />
+
+    <TextView
+        android:id="@+id/flightNo"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="5dip"
+        android:textStyle="bold"
+        android:typeface="sans"
+        android:layout_weight="1" />
+
 
 </LinearLayout>

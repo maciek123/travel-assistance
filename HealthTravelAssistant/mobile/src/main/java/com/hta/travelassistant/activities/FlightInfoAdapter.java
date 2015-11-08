@@ -44,23 +44,31 @@ public class FlightInfoAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = layoutInflater.inflate(R.layout.flight_info_details, null);
             holder = new ViewHolder();
-            holder.headlineView = (TextView) convertView.findViewById(R.id.title);
-            holder.reporterNameView = (TextView) convertView.findViewById(R.id.reporter);
-            holder.reportedDateView = (TextView) convertView.findViewById(R.id.date);
+            holder.from = (TextView) convertView.findViewById(R.id.flightFrom);
+            holder.to= (TextView) convertView.findViewById(R.id.flightTo);
+            holder.date= (TextView) convertView.findViewById(R.id.flightDate);
+            holder.terminal = (TextView) convertView.findViewById(R.id.terminal);
+            holder.flightNo= (TextView) convertView.findViewById(R.id.flightNo);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.headlineView.setText(listData.get(position).getFlightNo());
-        holder.reporterNameView.setText("By, " + listData.get(position).getFrom());
-        holder.reportedDateView.setText(listData.get(position).getTo());
+        holder.flightNo.setText(listData.get(position).getFlightNo());
+        holder.from.setText("From: " + listData.get(position).getFrom());
+        holder.to.setText("To:" + listData.get(position).getTo());
+        holder.terminal.setText("Terminal: " + listData.get(position).getTerminal());
+        holder.date.setText("Departure: " + listData.get(position).getStartTime().toString());
+        holder.flightNo.setText("No: " + listData.get(position).getFlightNo());
         return convertView;
     }
 
     static class ViewHolder {
-        TextView headlineView;
-        TextView reporterNameView;
-        TextView reportedDateView;
+        TextView from;
+        TextView to;
+        TextView date;
+        TextView terminal;
+        TextView flightNo;
+
     }
 }
