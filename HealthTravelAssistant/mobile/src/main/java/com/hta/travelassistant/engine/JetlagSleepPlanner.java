@@ -24,6 +24,9 @@ import static org.joda.time.Duration.standardHours;
 public class JetlagSleepPlanner implements SleepPlanner {
     @Override
     public Iterable<Recommendation> planSleep(FlightInfo flightInfo, Iterable<SleepEntry> sleepEntries) {
+        for (SleepEntry entry : sleepEntries) {
+            System.out.println("entry = " + entry);
+        }
         double offset = flightInfo.getOffset();
         System.out.println("offset = " + offset);
         boolean fwd = offset < 0;

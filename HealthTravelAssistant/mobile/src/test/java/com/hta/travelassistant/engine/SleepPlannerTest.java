@@ -23,14 +23,14 @@ public class SleepPlannerTest {
 
     @Test
     public void shouldPlanAnything() throws Exception {
-        sleepPlanner.planSleep(new FlightInfo("ZRH", "LAX", DateTime.now().plusDays(2), Duration.standardHours(12)),
-                Collections.singletonList(new SleepEntry(DateTime.now().minusDays(2), Duration.standardHours(7))));
+        List<SleepEntry> sleepEntries = Collections.singletonList(new SleepEntry(DateTime.now().minusDays(2).withTime(23, 0, 0, 0), Duration.standardHours(7)));
+        sleepPlanner.planSleep(new FlightInfo("ZRH", "LAX", DateTime.now().plusDays(2), Duration.standardHours(12)), sleepEntries);
     }
 
     @Test
     public void shouldPlanSleep() throws Exception {
         FlightInfo flightInfo = new FlightInfo("ZRH", "NRT", DateTime.now().plusDays(12), Duration.standardHours(12));
-        List<SleepEntry> sleepEntries = Collections.singletonList(new SleepEntry(DateTime.now().minusDays(2).withTime(23, 0, 0,         0), Duration.standardHours(7)));
+        List<SleepEntry> sleepEntries = Collections.singletonList(new SleepEntry(DateTime.now().minusDays(2).withTime(23, 0, 0, 0), Duration.standardHours(7)));
         Iterable<Recommendation> recommendations = sleepPlanner.planSleep(flightInfo, sleepEntries);
 
     }
