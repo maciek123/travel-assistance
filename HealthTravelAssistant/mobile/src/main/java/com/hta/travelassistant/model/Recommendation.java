@@ -4,36 +4,46 @@ import org.joda.time.DateTime;
 import org.joda.time.Duration;
 
 public class Recommendation {
-  private DateTime startTime;
-  private Duration duration;
-  private Iterable<Action> actions;
+    private DateTime startTime;
+    private Duration duration;
+    private Iterable<Action> actions;
 
-  public Recommendation(DateTime startTime, Duration duration, Iterable<Action> actions) {
-    this.startTime = startTime;
-    this.duration = duration;
-    this.actions = actions;
-  }
+    private boolean userNotified = false;
 
-  public DateTime getStartTime() {
-    return startTime;
-  }
+    public Recommendation(DateTime startTime, Duration duration, Iterable<Action> actions) {
+        this.startTime = startTime;
+        this.duration = duration;
+        this.actions = actions;
+    }
 
-  public Duration getDuration() {
-    return duration;
-  }
+    public DateTime getStartTime() {
+        return startTime;
+    }
 
-  public Iterable<Action> getActions() {
-    return actions;
-  }
+    public Duration getDuration() {
+        return duration;
+    }
 
-  @Override
-  public String toString() {
-    return "Recommendation{" +
-            "startTime=" + startTime +
-            ", duration=" + duration +
-            ", actions=" + actions +
-            '}';
-  }
+    public Iterable<Action> getActions() {
+        return actions;
+    }
+
+    public boolean isUserNotified() {
+        return userNotified;
+    }
+
+    public void setUserNotified(boolean userNotified) {
+        this.userNotified = userNotified;
+    }
+
+    @Override
+    public String toString() {
+        return "Recommendation{" +
+                "startTime=" + startTime +
+                ", duration=" + duration +
+                ", actions=" + actions +
+                '}';
+    }
 
     @Override
     public boolean equals(Object o) {

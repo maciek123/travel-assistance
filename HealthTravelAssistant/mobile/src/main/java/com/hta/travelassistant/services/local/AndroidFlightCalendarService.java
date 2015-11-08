@@ -7,9 +7,12 @@ import android.provider.CalendarContract;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.hta.travelassistant.activities.R;
+import com.hta.travelassistant.engine.AirportUtils;
 import com.hta.travelassistant.model.FlightInfo;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.Duration;
 
 import java.util.ArrayList;
@@ -47,6 +50,7 @@ public class AndroidFlightCalendarService implements FlightCalendarService {
 
     private AndroidFlightCalendarService(AppCompatActivity activity) {
         this.activity = activity;
+        AirportUtils.init(activity.getResources().openRawResource(R.raw.iata));
     }
 
     public static FlightCalendarService getInstnace(AppCompatActivity activity) {
@@ -111,9 +115,24 @@ public class AndroidFlightCalendarService implements FlightCalendarService {
             long to = cur.getLong(INSTANCE_PROJECTION_END);
             DateTime startTime = new DateTime(from);
             Duration duration = Duration.millis(to - from);
-            result.add(new FlightInfo(srcAirport, dstAirport, startTime, duration));
-            Log.d("Process flight event", "Process flight event: " + title);
+            if(dstAirport != null && srcAirport != null && duration != null) {
+                int offset = calculateOffset(srcAirport, dstAirport, duration, startTime);
+                result.add(new FlightInfo(srcAirport, dstAirport, startTime, duration, offset));
+                Log.d("Process flight event", "Process flight event: " + title);
+            }else{
+                Log.w("Skip calendar event","Missing information about the flight in the event: " + title);
+            }
         }
         return result;
     }
+
+
+    private static int calculateOffset(String from, String to, Duration duration, DateTime startTime) {
+        DateTimeZone fromTZ = AirportUtils.airportToTZ(from);
+        DateTimeZone toTZ = AirportUtils.airportToTZ(to);
+        DateTime arrivalTime = startTime.plus(duration);
+        int offsetMillis = fromTZ.getOffset(startTime) - toTZ.getOffset(arrivalTime);
+        return offsetMillis / (1000 * 60 * 60);
+    }
+
 }

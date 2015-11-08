@@ -10,18 +10,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AirportUtils {
-    private static Map<String, String> mapping = readMapping();
+    private static Map<String, String> mapping;
 
     public static DateTimeZone airportToTZ(String airport) {
+        if(mapping == null){
+            throw new IllegalStateException("Please call first init method");
+        }
         return DateTimeZone.forID(mapping.get(airport));
     }
 
     public static boolean isValidAirportId(String id) {
+        if(mapping == null){
+            throw new IllegalStateException("Please call first init method");
+        }
         return mapping.keySet().contains(id);
     }
 
-    private static Map<String, String> readMapping() {
-        InputStream stream = AirportUtils.class.getClassLoader().getResourceAsStream("iata.tzmap");
+    public static void init (InputStream stream) {
 
         BufferedReader in = new BufferedReader(new InputStreamReader(stream));
         String line = null;
@@ -35,7 +40,7 @@ public class AirportUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return m;
+        mapping = m;
     }
 
 }

@@ -1,20 +1,16 @@
 package com.hta.travelassistant.activities;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.hta.travelassistant.model.FlightInfo;
+import com.hta.travelassistant.services.NotificationService;
 import com.hta.travelassistant.services.local.AndroidFlightCalendarService;
 
 import java.util.List;
@@ -27,18 +23,6 @@ public class NextFlightActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_next_flight);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
 
         // Assume thisActivity is the current activity
         int hasWriteContactsPermission = checkSelfPermission(Manifest.permission.WRITE_CONTACTS);
@@ -47,9 +31,15 @@ public class NextFlightActivity extends AppCompatActivity {
                     REQUEST_CODE_ASK_PERMISSIONS);
             return;
         }
-        List<FlightInfo> all = AndroidFlightCalendarService.getInstnace(this).getAllFlights();
+
+        initNextFlight();
     }
 
+    private void initNextFlight() {
+        List<FlightInfo> all = AndroidFlightCalendarService.getInstnace(this).getAllFlights();
+
+        startService(new Intent(getBaseContext(), NotificationService.class));
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -57,7 +47,7 @@ public class NextFlightActivity extends AppCompatActivity {
             case REQUEST_CODE_ASK_PERMISSIONS:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // Permission Granted
-                    List<FlightInfo> all = AndroidFlightCalendarService.getInstnace(this).getAllFlights();
+                    initNextFlight();
                 } else {
                     // Permission Denied
                     Toast.makeText(NextFlightActivity.this, "WRITE_CONTACTS Denied", Toast.LENGTH_SHORT)
@@ -73,7 +63,6 @@ public class NextFlightActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_next_flight, menu);
         return true;
     }
 
@@ -82,12 +71,7 @@ public class NextFlightActivity extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 }

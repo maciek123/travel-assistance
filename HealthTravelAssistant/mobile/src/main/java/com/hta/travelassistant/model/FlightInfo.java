@@ -17,16 +17,12 @@ public class FlightInfo {
     private int offset = -1;
 
 
-    public FlightInfo(String from, String to, DateTime startTime, Duration duration) {
+    public FlightInfo(String from, String to, DateTime startTime, Duration duration, int offset) {
         this.from = from;
         this.to = to;
         this.startTime = startTime;
         this.duration = duration;
-        DateTimeZone fromTZ = AirportUtils.airportToTZ(getFrom());
-        DateTimeZone toTZ = AirportUtils.airportToTZ(getTo());
-        DateTime arrivalTime = getStartTime().plus(getDuration());
-        int offsetMillis = fromTZ.getOffset(getStartTime()) - toTZ.getOffset(arrivalTime);
-        offset = offsetMillis / (1000 * 60 * 60);
+        this.offset = offset;
     }
 
     public DateTime getStartTime() {
