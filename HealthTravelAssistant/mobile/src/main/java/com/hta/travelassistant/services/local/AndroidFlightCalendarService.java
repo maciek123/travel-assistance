@@ -73,7 +73,7 @@ public class AndroidFlightCalendarService implements FlightCalendarService {
     @Override
     public FlightInfo getNextFlight() {
         List<FlightInfo> futureFlights = getFurtherFlights();
-        if(futureFlights != null && !futureFlights.isEmpty()){
+        if (futureFlights != null && !futureFlights.isEmpty()) {
             return futureFlights.get(0);
         }
         return null;
@@ -101,18 +101,18 @@ public class AndroidFlightCalendarService implements FlightCalendarService {
         }
 
         List<FlightInfo> result = new ArrayList<>(cur.getCount());
-        // Use the cursor to step through the returned records
         while (cur.moveToNext()) {
+            //  TODO: implement title/description parser for destination airport, or request external service?
             String title = cur.getString(INSTANCE_PROJECTION_TITLE);
-            Log.d("Process flight event", "Process flight event: " + title);
-            String srcAirport = "LAX";
-            String dstAirport = "ZHR";
-            String from = cur.getString(INSTANCE_PROJECTION_BEGIN);
-            String to = cur.getString(INSTANCE_PROJECTION_END);
-            DateTime startTime = DateTime.now();
-            Duration duration = Duration.standardHours(12);
+            String srcAirport = cur.getString(INSTANCE_PROJECTION_LOCATION);
+            String description = cur.getString(INSTANCE_PROJECTION_DESCRIPTION);
+            String dstAirport = FlightDetailsService.getInstance().getDestinationAirport(description);
+            long from = cur.getLong(INSTANCE_PROJECTION_BEGIN);
+            long to = cur.getLong(INSTANCE_PROJECTION_END);
+            DateTime startTime = new DateTime(from);
+            Duration duration = Duration.millis(to - from);
             result.add(new FlightInfo(srcAirport, dstAirport, startTime, duration));
-
+            Log.d("Process flight event", "Process flight event: " + title);
         }
         return result;
     }

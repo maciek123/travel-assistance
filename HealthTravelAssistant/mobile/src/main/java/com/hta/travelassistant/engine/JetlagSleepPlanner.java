@@ -23,7 +23,7 @@ import static org.joda.time.Duration.standardHours;
 public class JetlagSleepPlanner implements SleepPlanner {
     @Override
     public Iterable<Recommendation> planSleep(FlightInfo flightInfo, Iterable<SleepEntry> sleepEntries) {
-        int offset = getOffset(flightInfo);
+        int offset = flightInfo.getOffset();
         System.out.println("offset = " + offset);
         boolean fwd = offset < 0;
         double step;
@@ -54,13 +54,5 @@ public class JetlagSleepPlanner implements SleepPlanner {
             System.out.println("r = " + r);
         }
         return recommendations;
-    }
-
-    private int getOffset(FlightInfo flightInfo) {
-        DateTimeZone fromTZ = AirportUtils.airportToTZ(flightInfo.getFrom());
-        DateTimeZone toTZ = AirportUtils.airportToTZ(flightInfo.getTo());
-        DateTime arrivalTime = flightInfo.getStartTime().plus(flightInfo.getDuration());
-        int offsetMillis = fromTZ.getOffset(flightInfo.getStartTime()) - toTZ.getOffset(arrivalTime);
-        return offsetMillis / (1000 * 60 * 60);
     }
 }

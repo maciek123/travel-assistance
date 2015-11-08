@@ -40,22 +40,14 @@ public class NextFlightActivity extends AppCompatActivity {
         });
 
 
-
-        try {
-            // Assume thisActivity is the current activity
-            int hasWriteContactsPermission = checkSelfPermission(Manifest.permission.WRITE_CONTACTS);
-            if (hasWriteContactsPermission != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[] {Manifest.permission.READ_CALENDAR},
-                        REQUEST_CODE_ASK_PERMISSIONS);
-                return;
-            }
-
-
-            List<FlightInfo> all = AndroidFlightCalendarService.getInstnace(this).getAllFlights();
-        } catch (Exception e) {
-            Log.e("No Permission", "No permission", e);
-            e.printStackTrace();
+        // Assume thisActivity is the current activity
+        int hasWriteContactsPermission = checkSelfPermission(Manifest.permission.WRITE_CONTACTS);
+        if (hasWriteContactsPermission != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.READ_CALENDAR},
+                    REQUEST_CODE_ASK_PERMISSIONS);
+            return;
         }
+        List<FlightInfo> all = AndroidFlightCalendarService.getInstnace(this).getAllFlights();
     }
 
 
