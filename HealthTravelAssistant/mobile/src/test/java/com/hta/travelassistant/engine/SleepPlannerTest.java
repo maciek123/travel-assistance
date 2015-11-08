@@ -23,7 +23,7 @@ public class SleepPlannerTest {
 
     @Test
     public void shouldPlanAnything() throws Exception {
-        sleepPlanner.planSleep(new FlightInfo("LAX", "ZRH", DateTime.now().plusDays(2), Duration.standardHours(12)),
+        sleepPlanner.planSleep(new FlightInfo("ZRH", "LAX", DateTime.now().plusDays(2), Duration.standardHours(12)),
                 Collections.singletonList(new SleepEntry(DateTime.now().minusDays(2), Duration.standardHours(7))));
     }
 

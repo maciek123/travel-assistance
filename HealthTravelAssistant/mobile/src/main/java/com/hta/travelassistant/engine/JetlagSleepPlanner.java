@@ -31,7 +31,7 @@ public class JetlagSleepPlanner implements SleepPlanner {
         if (fwd) {
             step = 1;
         } else {
-            step = -0.5;
+            step = -1.5;
         }
         SleepEntry normal = sleepEntries.iterator().next();
         LocalTime normalSleep = new LocalTime(normal.getStartTime());
