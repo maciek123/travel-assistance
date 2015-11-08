@@ -112,16 +112,21 @@ public class AndroidFlightCalendarService implements FlightCalendarService {
             String srcAirport = cur.getString(INSTANCE_PROJECTION_LOCATION);
             String description = cur.getString(INSTANCE_PROJECTION_DESCRIPTION);
             String dstAirport = FlightDetailsService.getInstance().getDestinationAirport(description);
+            String flightNo = FlightDetailsService.getInstance().getFlightNumber(description);
+            String terminal = FlightDetailsService.getInstance().getTerminal(description);
             long from = cur.getLong(INSTANCE_PROJECTION_BEGIN);
             long to = cur.getLong(INSTANCE_PROJECTION_END);
             DateTime startTime = new DateTime(from);
             Duration duration = Duration.millis(to - from);
             if(dstAirport != null && srcAirport != null && duration != null) {
                 int offset = calculateOffset(srcAirport, dstAirport, duration, startTime);
-                result.add(new FlightInfo(srcAirport, dstAirport, startTime, duration, offset));
-                Log.d("Process flight event", "Process flight event: " + title);
+                FlightInfo flightInfo = new FlightInfo(srcAirport, dstAirport, startTime, duration, offset);
+                flightInfo.setFlightNo(flightNo);
+                flightInfo.setTerminal(terminal);
+                result.add(flightInfo);
+                Log.e("Process flight event", "Process flight event: " + title);
             }else{
-                Log.w("Skip calendar event","Missing information about the flight in the event: " + title);
+                Log.e("Skip calendar event","Missing information about the flight in the event: " + title);
             }
         }
         return result;

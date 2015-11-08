@@ -5,7 +5,9 @@ import com.hta.travelassistant.model.SleepSummary;
 import com.hta.travelassistant.services.remote.FitbitService;
 
 import org.joda.time.DateTime;
+import org.joda.time.Duration;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -13,14 +15,19 @@ import java.util.List;
  */
 public class FitbitServiceMock implements FitbitService {
 
+    List<SleepEntry> entries = Arrays.asList(new SleepEntry(DateTime.now(), Duration.millis(1000)),
+            new SleepEntry(DateTime.now().minusDays(1), Duration.millis(1000)),
+            new SleepEntry(DateTime.now().minusDays(2), Duration.millis(2000)),
+            new SleepEntry(DateTime.now().minusDays(3), Duration.millis(3000)));
+
     @Override
     public List<SleepEntry> getSleepEntries(DateTime from, DateTime to) {
-        return null;
+        return entries;
     }
 
     @Override
     public List<SleepEntry> getSleepEntries(DateTime from, String period) {
-        return null;
+        return entries;
     }
 
     @Override

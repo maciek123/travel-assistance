@@ -29,16 +29,24 @@
             android:exported="true" >
         </service>
 
+        <!-- For demo purpose we use a service
         <receiver
             android:name="com.hta.travelassistant.receivers.CalendarUpdateReceiver"
             android:enabled="true"
             android:exported="true" >
             <intent-filter>
-                <action android:name="android.intent.action.PROVIDER_CHANGED"/>
-                <data android:scheme="content"/>
-                <data android:host="com.android.calendar"/>
+                <action android:name="android.intent.action.PROVIDER_CHANGED" />
+
+                <data android:scheme="content" />
+                <data android:host="com.android.calendar" />
             </intent-filter>
-        </receiver>
+        </receiver>-->
+
+        <service
+            android:name="com.hta.travelassistant.services.CalendarScannerService"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
     </application>
 
 </manifest>

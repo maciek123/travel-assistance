@@ -7,9 +7,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.hta.travelassistant.model.FlightInfo;
+import com.hta.travelassistant.services.CalendarScannerService;
 import com.hta.travelassistant.services.NotificationService;
 import com.hta.travelassistant.services.local.AndroidFlightCalendarService;
 
@@ -38,7 +41,15 @@ public class NextFlightActivity extends AppCompatActivity {
     private void initNextFlight() {
         List<FlightInfo> all = AndroidFlightCalendarService.getInstnace(this).getAllFlights();
 
+        ListView listView = (ListView) findViewById(R.id.listView);
+
+        FlightInfoAdapter adapter = new FlightInfoAdapter(this, all);
+        listView.setAdapter(adapter);
+
+
+
         startService(new Intent(getBaseContext(), NotificationService.class));
+        startService(new Intent(getBaseContext(), CalendarScannerService.class));
     }
 
     @Override

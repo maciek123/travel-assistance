@@ -18,8 +18,9 @@ public class FlightDetailsService {
         return ourInstance;
     }
 
-    private final static String DST_AIRPORT_PATTERN = "DESTINATION";
+    private final static String DST_AIRPORT_PATTERN = "TO";
     private final static String FLIGHT_NO_PATTERN = "REF";
+    private final static String TERMINAL_PATTERN = "TERMINAL";
 
     private FlightDetailsService() {
     }
@@ -45,5 +46,9 @@ public class FlightDetailsService {
 
     public String getFlightNumber(String text) {
         return parseByPattern(text, FLIGHT_NO_PATTERN);
+    }
+
+    public String getTerminal(String text) {
+        return parseByPattern(text, TERMINAL_PATTERN);
     }
 }

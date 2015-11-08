@@ -24,7 +24,7 @@ import java.util.TimerTask;
 public class NotificationService extends Service {
 
     // Notification interval - 1 min
-    private static final long UPDATE_INTERVAL = 1000 * 30;
+    private static final long UPDATE_INTERVAL = 1000 * 60;
 
 //    private RecommendationProvider recommendationProvider = new RecommendationProviderMock();
     private RecommendationProvider recommendationProvider = InMemoryRecommendationProvider.getInstance();
@@ -73,6 +73,7 @@ public class NotificationService extends Service {
                 // notificationId allows you to update the notification later on.
                 int notificationId = 123;
                 mNotificationManager.notify(notificationId, notification);
+
             }
         }
     }
