@@ -22,6 +22,11 @@ public class FlightInfo {
         this.to = to;
         this.startTime = startTime;
         this.duration = duration;
+        DateTimeZone fromTZ = AirportUtils.airportToTZ(getFrom());
+        DateTimeZone toTZ = AirportUtils.airportToTZ(getTo());
+        DateTime arrivalTime = getStartTime().plus(getDuration());
+        int offsetMillis = fromTZ.getOffset(getStartTime()) - toTZ.getOffset(arrivalTime);
+        offset = offsetMillis / (1000 * 60 * 60);
     }
 
     public DateTime getStartTime() {
@@ -41,13 +46,6 @@ public class FlightInfo {
     }
 
     public int getOffset() {
-        if (offset == -1) {
-            DateTimeZone fromTZ = AirportUtils.airportToTZ(getFrom());
-            DateTimeZone toTZ = AirportUtils.airportToTZ(getTo());
-            DateTime arrivalTime = getStartTime().plus(getDuration());
-            int offsetMillis = fromTZ.getOffset(getStartTime()) - toTZ.getOffset(arrivalTime);
-            offset = offsetMillis / (1000 * 60 * 60);
-        }
         return offset;
     }
 
