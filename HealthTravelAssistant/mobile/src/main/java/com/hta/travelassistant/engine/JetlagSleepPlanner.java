@@ -24,7 +24,7 @@ import static org.joda.time.Duration.standardHours;
 public class JetlagSleepPlanner implements SleepPlanner {
     @Override
     public Iterable<Recommendation> planSleep(FlightInfo flightInfo, Iterable<SleepEntry> sleepEntries) {
-        int offset = flightInfo.getOffset();
+        double offset = flightInfo.getOffset();
         System.out.println("offset = " + offset);
         boolean fwd = offset < 0;
         double step;
@@ -38,7 +38,7 @@ public class JetlagSleepPlanner implements SleepPlanner {
         Duration normalDuration = normal.getDuration();
         System.out.println("normalSleep = " + normalSleep);
         DateTime timeToSleep = flightInfo.getStartTime().minusDays(abs((int) (offset / step))).withTime(normalSleep);
-        while (timeToSleep.isBeforeNow()) timeToSleep.plusDays(1);
+        while (timeToSleep.isBeforeNow()) timeToSleep = timeToSleep.plusDays(1);
         List<Recommendation> recommendations = new LinkedList<>();
         while (offset * step < 0) {
             timeToSleep = timeToSleep.plusMinutes((int) (60 * step));
@@ -51,6 +51,7 @@ public class JetlagSleepPlanner implements SleepPlanner {
             recommendations.add(new Recommendation(timeToSleep, normalDuration, singletonList(SLEEP)));
             offset += step;
             timeToSleep = timeToSleep.plusDays(1);
+            System.out.println("offset = " + offset);
         }
         for (Recommendation r : recommendations) {
             System.out.println("r = " + r);

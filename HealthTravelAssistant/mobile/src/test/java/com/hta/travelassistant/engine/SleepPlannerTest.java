@@ -29,7 +29,7 @@ public class SleepPlannerTest {
 
     @Test
     public void shouldPlanSleep() throws Exception {
-        FlightInfo flightInfo = new FlightInfo("LAX", "ZRH", DateTime.now().plusDays(12), Duration.standardHours(12));
+        FlightInfo flightInfo = new FlightInfo("ZRH", "NRT", DateTime.now().plusDays(12), Duration.standardHours(12));
         List<SleepEntry> sleepEntries = Collections.singletonList(new SleepEntry(DateTime.now().minusDays(2).withTime(23, 0, 0,         0), Duration.standardHours(7)));
         Iterable<Recommendation> recommendations = sleepPlanner.planSleep(flightInfo, sleepEntries);
 
